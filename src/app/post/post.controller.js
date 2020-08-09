@@ -1,4 +1,5 @@
-const { getPosts, createPost } = require("./post.service");
+const { getPosts, createPost, updatePost } = require("./post.service");
+const _ = require('lodash');
 
 /* 内容列表 */
 
@@ -29,7 +30,24 @@ const store = async (req, res, next) => {
   }
 };
 
+/* 更新内容 */
+
+const update = async (req, res, next) => {
+  // 获取内容ID
+  const { postId } = req.params;
+  //准备数据
+  const post = _.pick(req.body,['title','content']);
+  //更新
+  try {
+    const data = await updatePost(parseInt(postId, 10), post);
+    res.send(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   index,
   store,
+  update,
 };

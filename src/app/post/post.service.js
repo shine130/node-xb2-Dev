@@ -35,7 +35,25 @@ const createPost = async (post) => {
   return data;
 };
 
+//更新内容
+
+const updatePost = async (postId, post) => {
+  //准备查询
+  const statement = `
+    UPDATE post
+    SET ?
+    WHERE id = ?
+  `;
+
+  //执行查询
+  const [data] = await connection.promise().query(statement, [post, postId]);
+
+  //提供数据
+  return data;
+};
+
 module.exports = {
   getPosts,
   createPost,
+  updatePost,
 };
