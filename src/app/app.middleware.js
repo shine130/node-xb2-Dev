@@ -18,6 +18,14 @@ const defauleErrorHandler = (err,req,res,next) => {
       message;
   
   switch(err.message){
+    case 'NAME_IS_REQUIRED':
+      statusCode = 400;
+      message = '请提供用户名';
+      break;
+    case 'PASSWORD_IS_REQUIRED':
+      statusCode = 400;
+      message = '请提供用户密码';
+      break;
     default:
       statusCode = 500;
       message = '服务暂时出了点问题~';

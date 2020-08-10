@@ -2,6 +2,7 @@ const express = require('express');
 const {APP_PORT} = require('./src/app/app.config');
 // const {connection} = require ('./src/app/database/mysql');
 const postRouter = require('./src/app/post/post.router');
+const userRouter = require('./src/app/user/user.router');
 const {defauleErrorHandler} = require('./src/app/app.middleware');
 
 // 创建应用
@@ -12,7 +13,7 @@ app.use(express.json());
 
 // 路由
 
-app.use(postRouter.router);
+app.use(postRouter.router,userRouter.router);
 
 //默认异常处理
 
