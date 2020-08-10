@@ -52,8 +52,23 @@ const updatePost = async (postId, post) => {
   return data;
 };
 
+//删除内容
+
+const deletePost = async (postId) => {
+  //准备查询
+  const statement = `
+    DELETE FROM post
+    WHERE id = ?
+  `;
+  //执行查询
+  const [data] = await connection.promise().query(statement, postId);
+  //提供数据
+  return data;
+};
+
 module.exports = {
   getPosts,
   createPost,
   updatePost,
+  deletePost,
 };

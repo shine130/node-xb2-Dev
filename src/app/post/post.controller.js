@@ -1,4 +1,4 @@
-const { getPosts, createPost, updatePost } = require("./post.service");
+const { getPosts, createPost, updatePost ,deletePost} = require("./post.service");
 const _ = require('lodash');
 
 /* 内容列表 */
@@ -46,8 +46,24 @@ const update = async (req, res, next) => {
   }
 };
 
+/* 删除数据 */
+
+const destroy = async (req,res,next) => {
+  //获取内容ID
+  const {postId} = req.params;
+  //删除内容
+  try{
+    const data = await deletePost(parseInt(postId,10));
+    res.send(data);
+  }catch(error){ 
+    next(error);
+  }
+}
+
+
 module.exports = {
   index,
   store,
   update,
+  destroy,
 };
