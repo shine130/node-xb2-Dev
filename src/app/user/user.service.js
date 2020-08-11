@@ -19,9 +19,14 @@ const createUser = async (user) => {
 
 // 按用户名查找用户
 
-const getUserByName = async (name) => {
+const getUserByName = async (name,options={}) => {
+  //准备选项
+  const {password} = options;
   const statement = `
-    SELECT id,name
+    SELECT 
+    id,
+    name
+    ${password ? ', password' : ''}
     FROM user
     WHERE name = ?
   `;
