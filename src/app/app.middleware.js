@@ -38,6 +38,10 @@ const defauleErrorHandler = (err,req,res,next) => {
       statusCode = 400;
       message = '密码不对';
       break;
+    case 'UNAUTHORIZED':
+      statusCode = 401;
+      message = '请先登录';
+      break;
     default:
       statusCode = 500;
       message = '服务暂时出了点问题~';

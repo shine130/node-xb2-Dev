@@ -21,9 +21,10 @@ const index = async (req, res, next) => {
 const store = async (req, res, next) => {
   //准备数据
   const { title, content } = req.body;
+  const {id:userId} = req.user;
   //创建内容
   try {
-    const data = await createPost({ title, content });
+    const data = await createPost({ title, content,userId });
     res.status(201).send(data);
   } catch (error) {
     next(error);

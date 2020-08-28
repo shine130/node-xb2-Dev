@@ -21,6 +21,12 @@ const login = async (req, res, next) => {
 
 };
 
+const validate = (req,res,next) => {
+  console.log(req.user)
+  res.sendStatus(200);
+}
+
 module.exports = {
   login,
+  validate,
 };

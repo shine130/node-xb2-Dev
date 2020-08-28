@@ -1,6 +1,7 @@
 const express = require('express');
 const postController = require('./post.controller');
 const {requestUrl} = require('../app.middleware');
+const {authGuard} = require('../auth/auth.middleware');
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ router.get('/posts',requestUrl,postController.index);
 
 /* 创建内容 */
 
-router.post('/posts',postController.store);
+router.post('/posts',authGuard,postController.store);
 
 /* 更新内容 */
 

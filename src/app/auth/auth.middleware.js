@@ -1,5 +1,8 @@
-const userService = require("../user/user.service");
 const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
+const userService = require("../user/user.service");
+const {PUBLIC_KEY} = require('../app.config');
+
 
 // 验证用户数据
 
@@ -27,6 +30,37 @@ const validateLoginData = async (req, res, next) => {
   next();
 };
 
+//验证用户身份
+
+const authGuard = (req, res, next) => {
+  console.log('验证用户身份');
+  try {
+    //提取Authorization
+    const authorization = req.header('Authorization');
+    if(!authorization) throw new Error();
+
+    //提取JWT令牌
+    const token = authorization.replace('Bearer ','');
+    if(!token) throw new Error();
+
+    //验证令牌
+    const decoded = jwt.verify(token,PUBLIC_KEY,{
+      algorithms:['RS256']
+    })
+
+    //在请求里添加当前用户
+    req.user = decoded;
+
+    // 下一步
+    next();
+
+  }catch(error){
+    next(new Error('UNAUTHORIZED'));
+  }
+
+}
+
 module.exports = {
   validateLoginData,
+  authGuard
 };
