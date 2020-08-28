@@ -22,7 +22,7 @@ app.use(defauleErrorHandler);
 
 
 app.listen(APP_PORT,() => {
-  console.log('服务已经启动');
+  console.log('服务已经启动 http://localhost:3000/');
 })
 
 

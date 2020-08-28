@@ -20,6 +20,9 @@ const validateLoginData = async (req, res, next) => {
   const matched = await bcrypt.compare(password, user.password);
   if (!matched) return next(new Error("PASSWORD_DOES_NOT_MATCH"));
 
+  //在请求主体里添加用户
+  req.body.user = user;
+
   //下一步
   next();
 };
