@@ -77,4 +77,11 @@ CREATE TABLE `file` (
     
 ) DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_unicode_ci;
+
+
+ALTER TABLE `file` ADD COLUMN (
+  `width` SMALLINT(6) NOT NULL,
+  `height` SMALLINT(6) NOT NULL,
+  `metadata` JSON DEFAULT NULL
+);
 ```
