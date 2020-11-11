@@ -84,4 +84,24 @@ ALTER TABLE `file` ADD COLUMN (
   `height` SMALLINT(6) NOT NULL,
   `metadata` JSON DEFAULT NULL
 );
+
+
+
+CREATE TABLE `tag` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL UNIQUE KEY
+) DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `post_tag` (
+  `postId` INT(11) NOT NULL,
+  `tagId` INT(11) NOT NULL,
+  PRIMARY KEY(`postId`,`tagId`),
+  FOREIGN KEY (`postId`) REFERENCES `post`(`id`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY (`tagId`) REFERENCES `tag`(`id`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION
+) DEFAULT CHARSET=utf8mb4
+COLLATE=utf8mb4_unicode_ci;
+
 ```

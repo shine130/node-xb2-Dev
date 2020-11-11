@@ -66,9 +66,45 @@ const deletePost = async (postId) => {
   return data;
 };
 
+//保存内容标签
+
+const createPostTag = async(postId,tagId) => {
+  //准备查询
+  const statement = `
+    INSERT INTO post_tag (postId,tagId)
+    VALUES(?,?)
+  `;
+
+  //执行查询
+  const [data] = await connection.promise().query(statement,[postId,tagId]);
+
+  //提供数据
+  return data;
+
+}
+
+//检查内容标签
+
+const postHasTag = async (postId,tagId) => {
+  //准备查询
+  const statement = `
+    SELECT * FROM post_tag
+    WHERE postId=? AND tagId=?
+  `;
+
+  //执行查询
+  const [data] = await connection.promise().query(statement,[postId,tagId]);
+
+  //提供数据
+  return data[0] ? true:false;
+
+};
+
 module.exports = {
   getPosts,
   createPost,
   updatePost,
   deletePost,
+  createPostTag,
+  postHasTag,
 };

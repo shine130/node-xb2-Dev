@@ -22,6 +22,15 @@ router.patch('/posts/:postId',authGuard,accessControl({possession:true}),postCon
 
 router.delete('/posts/:postId',authGuard,accessControl({possession:true}),postController.destroy);
 
+/* 添加内容标签 */
+
+router.post(
+  '/posts/:postId/tag',
+  authGuard,
+  accessControl({possession:true}),
+  postController.storePostTag
+)
+
 module.exports = {
   router,
 }

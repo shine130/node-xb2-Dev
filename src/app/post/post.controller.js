@@ -1,5 +1,13 @@
-const { getPosts, createPost, updatePost ,deletePost} = require("./post.service");
+const {
+  getPosts,
+  createPost,
+  updatePost,
+  deletePost,
+  createPostTag,
+  postHasTag,
+} = require("./post.service");
 const _ = require('lodash');
+const {getTagByName,createTag} = require("../tag/tag.service");
 
 /* 内容列表 */
 
@@ -61,10 +69,55 @@ const destroy = async (req,res,next) => {
   }
 }
 
+/* 添加内容标签 */
+const storePostTag = async (req,res,next) => {
+  //准备数据
+  const {postId} = req.params;
+  const {name} = req.body;
+
+  //查找标签
+  try{
+    tag = await getTagByName(name);
+  }catch(error){
+    return next(error);
+  }
+
+  //找到标签，验证内容标签
+  if(tag){
+    try{
+      const postTag = await postHasTag(parseInt(postId,10),tag.id);
+      if(postTag) return next(new Error('POST_ALREADY_HAS_THIS_TAG'));
+    }catch(error){
+      return next(error);
+    }
+  }
+
+  //没找到标签，创建这个标签
+  if(!tag){
+    try{
+      const data = await createTag({name});
+      tag = {id:data.inserId};
+    }catch(error){
+      return next(error);
+    }
+  }
+
+  //给内容打上标签
+  try{
+    await createPostTag(parseInt(postId,10),tag.id);
+    res.sendStatus(201);
+  }catch(error){
+    return next(error);
+  }
+
+  
+}
+
 
 module.exports = {
   index,
   store,
   update,
   destroy,
+  storePostTag,
 };
