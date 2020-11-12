@@ -100,6 +100,23 @@ const postHasTag = async (postId,tagId) => {
 
 };
 
+//移除内容标签
+
+const deletePostTag = async (postId,tagId) => {
+  //准备查询
+  const statement = `
+    DELETE FROM post_tag
+    WHERE postId = ? AND tagId = ?
+  `;
+
+  //执行查询
+  const [data] = await connection.promise().query(statement,[postId,tagId]);
+
+  //提供数据
+  return data;
+
+}
+
 module.exports = {
   getPosts,
   createPost,
@@ -107,4 +124,5 @@ module.exports = {
   deletePost,
   createPostTag,
   postHasTag,
+  deletePostTag,
 };

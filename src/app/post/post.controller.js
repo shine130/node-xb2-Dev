@@ -5,6 +5,7 @@ const {
   deletePost,
   createPostTag,
   postHasTag,
+  deletePostTag,
 } = require("./post.service");
 const _ = require('lodash');
 const {getTagByName,createTag} = require("../tag/tag.service");
@@ -113,6 +114,23 @@ const storePostTag = async (req,res,next) => {
   
 }
 
+/* 移除内容标签 */
+
+const destroyPostTag = async (req,res,next) => {
+  //准备数据
+  const {postId} = req.params;
+  const {tagId} = req.body;
+
+  //移除内容标签
+  try {
+    await deletePostTag(parseInt(postId,10),tagId);
+    res.sendStatus(200);
+  }catch(error){
+    next(error);
+  }
+
+}
+
 
 module.exports = {
   index,
@@ -120,4 +138,5 @@ module.exports = {
   update,
   destroy,
   storePostTag,
+  destroyPostTag,
 };
