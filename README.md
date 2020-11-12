@@ -104,4 +104,20 @@ CREATE TABLE `post_tag` (
 ) DEFAULT CHARSET=utf8mb4
 COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE `comment` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `content` LONGTEXT,
+  `postId` INT(11) NOT NULL,
+  `userId` INT(11) NOT NULL,
+  `parentId` INT(11) DEFAULT NULL,
+
+  FOREIGN KEY(`postId`) REFERENCES `post`(`id`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY(`userId`) REFERENCES `user`(`id`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION,
+  FOREIGN KEY(`parentId`) REFERENCES `comment`(`id`)
+    ON DELETE NO ACTION ON UPDATE NO ACTION
+) DEFAULT CHARSET=utf8mb4
+  COLLATE=utf8mb4_unicode_ci;
+
 ```

@@ -6,6 +6,7 @@ const userRouter = require('./src/app/user/user.router');
 const authRouter = require('./src/app/auth/auth.router');
 const fileRouter = require('./src/app/file/file.router');
 const tagRouter = require('./src/app/tag/tag.router');
+const commentRouter = require('./src/app/comment/comment.router');
 const {defauleErrorHandler} = require('./src/app/app.middleware');
 
 // 创建应用
@@ -16,7 +17,14 @@ app.use(express.json());
 
 // 路由
 
-app.use(postRouter.router,userRouter.router,authRouter.router,fileRouter.router,tagRouter.router);
+app.use(
+  postRouter.router,
+  userRouter.router,
+  authRouter.router,
+  fileRouter.router,
+  tagRouter.router,
+  commentRouter.router
+  );
 
 //默认异常处理
 
