@@ -319,3 +319,138 @@ SELECT
 FROM
  post
 ```
+
+SQL：拼接文件数据表获取内容相关文件列表
+
+```
+SELECT
+ post.id,
+ post.title,
+ JSON_ARRAYAGG(file.id) AS files
+FROM
+ post
+LEFT JOIN file
+ ON file.postId = post.id
+GROUP BY
+ post.id
+
+```
+
+SQL：解决多表拼接时出现的重复问题
+
+```
+SELECT
+ post.id,
+ post.title,
+ GROUP_CONCAT(DISTINCT file.id) AS files
+FROM
+ post
+LEFT JOIN file
+ ON file.postId = post.id
+LEFT JOIN comment
+ ON comment.postId = post.id
+GROUP BY
+ post.id
+
+```
+
+SQL：拼接文件数据表时限制内容相关文件的数量
+
+```
+SELECT
+ post.id,
+ post.title,
+ GROUP_CONCAT(DISTINCT file.id) AS files
+FROM
+ post
+LEFT JOIN LATERAL(
+ SELECT *
+ FROM file 
+ WHERE file.postId = post.id
+ ORDER BY file.id DESC
+ LIMIT 1
+) AS file
+ ON file.postId = post.id
+LEFT JOIN comment
+ ON comment.postId = post.id
+GROUP BY
+ post.id
+```
+
+注意：LATERAL这个关键词只能在 8.x 以上版本的 MySQL 里面使用
+
+SQL：用 CAST 转换数据的类型
+
+```
+SELECT
+ post.id,
+ post.title,
+ CAST(
+  IF(
+   COUNT(file.id),
+   GROUP_CONCAT(
+    DISTINCT JSON_OBJECT(
+      'id',file.id,
+       'width',file.width,
+       'height',file.height
+     )
+   ),
+   NULL   
+   ) AS JSON
+ ) AS file
+FROM
+ post
+LEFT JOIN LATERAL(
+ SELECT *
+ FROM file 
+ WHERE file.postId = post.id
+ ORDER BY file.id DESC
+ LIMIT 1
+) AS file
+ ON file.postId = post.id
+LEFT JOIN comment
+ ON comment.postId = post.id
+GROUP BY
+ post.id
+
+```
+SQL：用 CONCAT 组织一个数组
+
+```
+SELECT
+ post.id,
+ post.title,
+ CAST(
+  IF(
+   COUNT(file.id),
+   CONCAT(
+    '[',
+      GROUP_CONCAT(
+    DISTINCT JSON_OBJECT(
+      'id',file.id,
+       'width',file.width,
+       'height',file.height
+     )
+   ) ORDER BY file.id DESC,  
+     ']'
+   )
+   ,
+   NULL   
+   ) AS JSON
+ ) AS file
+FROM
+ post
+LEFT JOIN LATERAL(
+ SELECT *
+ FROM file 
+ WHERE file.postId = post.id
+ ORDER BY file.id DESC
+ LIMIT 2
+) AS file
+ ON file.postId = post.id
+LEFT JOIN comment
+ ON comment.postId = post.id
+GROUP BY
+ post.id
+ 
+```
