@@ -286,3 +286,36 @@ WHERE
 GROUP BY
 post.id
 ```
+
+SQL：拼接评论数据表后统计评论总数
+
+```
+SELECT 
+ post.id,
+ post.title,
+ COUNT(comment.id) as totalComments
+FROM 
+ post 
+LEFT JOIN comment
+ ON comment.postId = post.id
+GROUP BY
+ post.id
+```
+
+SQL：直接用子查询统计内容评论总数
+
+```
+SELECT 
+ post.id,
+ post.title,
+(
+ SELECT
+  COUNT(comment.id)
+ FROM
+  comment
+ WHERE
+  comment.postId = post.id
+) as totalComments
+FROM
+ post
+```

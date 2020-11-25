@@ -1,6 +1,8 @@
 const { connection } = require("../database/mysql");
 
-// 查询数据
+/**
+ * 获取内容列表
+ */
 const getPosts = async () => {
   const statement = `
   SELECT
@@ -10,7 +12,16 @@ const getPosts = async () => {
   JSON_OBJECT(
     'id',user.id,
     'name',user.name
-  ) as user
+  ) as user,
+(
+ SELECT
+  COUNT(comment.id)
+ FROM
+  comment
+ WHERE
+  comment.postId = post.id
+) as totalComments
+
   FROM post
   LEFT JOIN user
     ON user.id = post.userId
