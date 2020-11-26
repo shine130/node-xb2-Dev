@@ -18,7 +18,7 @@ const index = async (req, res, next) => {
   // }
 
   try {
-    const posts = await getPosts();
+    const posts = await getPosts({sort:req.sort});
     res.send(posts);
   } catch (error) {
     next(error);

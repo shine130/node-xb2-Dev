@@ -3,7 +3,10 @@ const { connection } = require("../database/mysql");
 /**
  * 获取内容列表
  */
-const getPosts = async () => {
+const getPosts = async (options) => {
+
+  const {sort} = options;
+
   const statement = `
   SELECT
   post.id,
@@ -65,6 +68,7 @@ CAST(
 LEFT JOIN
  tag ON post_tag.tagId = tag.id
  GROUP BY post.id
+ ORDER BY ${sort}
   `;
   const [data] = await connection.promise().query(statement);
   return data;

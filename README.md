@@ -454,3 +454,21 @@ GROUP BY
  post.id
 
 ```
+
+SQL：设置内容列表的排序方式
+
+```
+SELECT
+ post.id,
+ post.title,
+ (
+ 	SELECT COUNT(comment.id)
+     FROM comment
+   WHERE comment.postId = post.id
+ ) AS totalComments
+ 
+FROM
+  post
+ORDER BY
+ totalComments DESC
+```
