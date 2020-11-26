@@ -431,7 +431,7 @@ SELECT
        'width',file.width,
        'height',file.height
      )
-   ) ORDER BY file.id DESC,  
+   ),  
      ']'
    )
    ,
@@ -452,5 +452,5 @@ LEFT JOIN comment
  ON comment.postId = post.id
 GROUP BY
  post.id
- 
+
 ```

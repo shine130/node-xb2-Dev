@@ -20,11 +20,51 @@ const getPosts = async () => {
   comment
  WHERE
   comment.postId = post.id
-) as totalComments
-
+) as totalComments,
+ CAST(
+   IF(
+     COUNT(file.id),
+     GROUP_CONCAT(
+       DISTINCT JSON_OBJECT(
+         'id',file.id,
+         'width',file.width,
+         'height',file.height
+       )
+     ),
+     NULL
+   ) AS JSON
+ ) AS file,
+CAST(
+  IF(
+    COUNT(tag.id),
+    CONCAT(
+      '[',
+      GROUP_CONCAT(
+        DISTINCT JSON_OBJECT(
+          'id',tag.id,
+          'name',tag.name
+        )
+      ),
+      ']'
+    ),
+    NULL
+  ) AS JSON
+) AS tags
   FROM post
   LEFT JOIN user
     ON user.id = post.userId
+ LEFT JOIN LATERAL (
+   SELECT *
+   FROM file
+   WHERE file.postId = post.id
+   ORDER BY file.id DESC
+   LIMIT 1
+ ) AS file ON post.id = file.postId
+ LEFT JOIN
+ post_tag ON post_tag.postId = post.id
+LEFT JOIN
+ tag ON post_tag.tagId = tag.id
+ GROUP BY post.id
   `;
   const [data] = await connection.promise().query(statement);
   return data;
