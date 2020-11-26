@@ -5,7 +5,15 @@ const { connection } = require("../database/mysql");
  */
 const getPosts = async (options) => {
 
-  const {sort} = options;
+  const {sort,filter} = options;
+
+  //SQL参数
+  let params = [];
+
+  // 设置SQL参数
+  if(filter.param){
+    params = [filter.param, ...params];
+  }
 
   const statement = `
   SELECT
@@ -67,10 +75,12 @@ CAST(
  post_tag ON post_tag.postId = post.id
 LEFT JOIN
  tag ON post_tag.tagId = tag.id
+ WHERE ${filter.sql}
  GROUP BY post.id
  ORDER BY ${sort}
   `;
-  const [data] = await connection.promise().query(statement);
+
+  const [data] = await connection.promise().query(statement,params);
   return data;
 };
 

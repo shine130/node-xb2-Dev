@@ -1,13 +1,13 @@
 const express = require('express');
 const postController = require('./post.controller');
 const {authGuard,accessControl} = require('../auth/auth.middleware');
-const {sort} = require('./post.middleware');
+const { sort, filter } = require("./post.middleware");
 
 const router = express.Router();
 
 /* 内容列表 */
 
-router.get("/posts", sort, postController.index);
+router.get("/posts", sort,filter, postController.index);
 
 
 /* 创建内容 */

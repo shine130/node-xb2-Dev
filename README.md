@@ -472,3 +472,34 @@ FROM
 ORDER BY
  totalComments DESC
 ```
+
+SQL：按用户过滤内容列表
+
+```
+SELECT
+ post.id,
+ post.title,
+ user.name
+FROM
+ post
+LEFT JOIN user
+ ON post.userId = user.id
+WHERE user.id = 1
+```
+
+SQL：按标签名过滤内容列表
+
+```
+SELECT
+ post.id,
+ post.title,
+ JSON_ARRAYAGG(tag.name) AS tags
+FROM post
+LEFT JOIN post_tag
+ ON post_tag.postId = post.id
+LEFT JOIN tag
+ ON post_tag.tagId = tag.id
+WHERE tag.name = '秋天'
+GROUP BY post.id
+
+```
